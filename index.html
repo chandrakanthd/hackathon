@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Webpage Title</title>
+    <!-- Bootstrap 5 CSS link -->
+    <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header class="bg-light p-3">
+        <div class="container d-flex align-items-center justify-content-between">
+            <!-- Logo -->
+            <div class="logo">
+                <img src="images/logo.png" alt="Your Logo" height="50">
+            </div>
+
+            <!-- Profile Image -->
+            <div class="profile-image">
+                <img src="images/profile.png" alt="Your Profile Image" class="rounded-circle" height="50">
+            </div>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        <h1>Users</h1>
+        <!-- <div class="mb-3 d-flex align-items-center justify-content-between">
+            <button type="button" class="btn btn-primary" onclick="addRow()">Add</button>
+            <button type="button" class="btn btn-danger" onclick="deleteRow()">Delete</button>
+        </div> -->
+        <div class="btn-group mb-3">
+            <button type="button" class="btn btn-primary" onclick="addRow()">Add</button>
+            <button type="button" class="btn btn-danger" onclick="deleteRow()">Delete</button>
+            <button type="button" class="btn btn-secondary" onclick="sortTable(0)">Sort by #</button>
+            <button type="button" class="btn btn-secondary" onclick="sortTable(1)">Sort by Name</button>
+            <button type="button" class="btn btn-secondary" onclick="sortTable(2)">Sort by Age</button>
+            <button type="button" class="btn btn-secondary" onclick="sortTable(3)">Sort by Occupation</button>
+        </div>
+
+        <table class="table table-striped" id="dataTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">#</th>
+                    <th onclick="sortTable(1)">Name</th>
+                    <th onclick="sortTable(2)">Age</th>
+                    <th onclick="sortTable(3)">Occupation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>John Doe</td>
+                    <td>30</td>
+                    <td>Engineer</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jane Smith</td>
+                    <td>25</td>
+                    <td>Designer</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Bob Johnson</td>
+                    <td>35</td>
+                    <td>Developer</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        var sortAscending = true;
+
+        function addRow() {
+            // Get the table body element
+            var tableBody = document.getElementsByTagName('tbody')[0];
+
+            // Create a new row and cells
+            var newRow = tableBody.insertRow();
+
+            // Add cells to the row
+            for (var i = 0; i < 4; i++) {
+                var newCell = newRow.insertCell();
+                newCell.textContent = 'New Data';
+            }
+        }
+
+        function deleteRow() {
+            var table = document.getElementsByTagName('table')[0];
+            var rowCount = table.rows.length;
+
+            if (rowCount > 1) {
+                table.deleteRow(rowCount - 1); // Delete the last row
+            }
+        }
+
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("dataTable");
+            switching = true;
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+
+                    // Check if the two rows should switch places based on the column's content
+                    if (sortAscending) {
+                        if (columnIndex === 3) {
+                            // For the "Occupation" column, do a string comparison
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                shouldSwitch = true;
+                                break;
+                            }
+                        } else {
+                            // For other columns, do a numeric comparison
+                            if (isNaN(x.innerHTML) || isNaN(y.innerHTML)) {
+                                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            } else {
+                                if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        if (columnIndex === 3) {
+                            // For the "Occupation" column, do a string comparison
+                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                shouldSwitch = true;
+                                break;
+                            }
+                        } else {
+                            // For other columns, do a numeric comparison
+                            if (isNaN(x.innerHTML) || isNaN(y.innerHTML)) {
+                                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            } else {
+                                if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                                    shouldSwitch = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+
+            // Toggle the sort order for the next click
+            sortAscending = !sortAscending;
+        }
+    </script>
+
+    <!-- Bootstrap 5 JS and Popper.js (for certain Bootstrap features) links -->
+    <script src="popper.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+</body>
+
+</html>
